@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title> Group Data in Iframe with Text Input</title>
+</head>
+<body>
+  <h2>Enter Group Data text with commas separating values:</h2>
+  <textarea id="textInput"  placeholder="Type something..." style="width:100%; height:200px; outline:2px solid black;" ></textarea>
+  <hr>
+  <div style="align-content:center;">
+  <button onclick="updateIframe()">Submit to Below Box -  Group Data Iframe To Arrange In text</button>
+  <br><br>
+  <button onclick="copyIframeContent()">Copy Iframe Content Below Box</button>
+  </div>
+  <hr>
+  <br>
+  <iframe id="dataIframe" width="100%" height="500"></iframe>
+
+  <script>
+    function updateIframe() {
+      const textInput = document.getElementById('textInput').value;
+      const iframe = document.getElementById('dataIframe');
+
+      // Split the input text by commas and join them with line breaks
+      const formattedContent = textInput.split(',').join('<br>');
+
+      // Replace the 'data.html' with the actual source of your data.
+      const iframeContent = `<html><body><p>${formattedContent}</p></body></html>`;
+
+      // Set the iframe content
+      const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+      iframeDocument.open();
+      iframeDocument.write(iframeContent);
+      iframeDocument.close();
+    }
+
+    function copyIframeContent() {
+      const iframe = document.getElementById('dataIframe');
+      const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+      const contentToCopy = iframeDocument.body.innerText;
+
+      // Create a temporary textarea element to copy the content to clipboard
+      const tempTextarea = document.createElement('textarea');
+      tempTextarea.style.position = 'absolute';
+      tempTextarea.style.left = '-9999px';
+      tempTextarea.value = contentToCopy;
+      document.body.appendChild(tempTextarea);
+
+      // Copy the content to clipboard
+      tempTextarea.select();
+      document.execCommand('copy');
+
+      // Clean up and remove the temporary textarea element
+      document.body.removeChild(tempTextarea);
+
+      // Optionally, provide user feedback that the content has been copied
+      alert('Iframe content copied to clipboard!');
+    }
+  </script>
+</body>
+</html>
